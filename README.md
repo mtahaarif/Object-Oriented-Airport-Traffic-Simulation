@@ -18,9 +18,6 @@ A **task-driven, console-based Java simulation** of an Airport Surface Traffic C
 - [Execution Flow](#execution-flow)
 - [Getting Started](#getting-started)
 - [Sample Interaction](#sample-interaction)
-- [Known Issues & Limitations](#known-issues--limitations)
-- [Possible Extensions](#possible-extensions)
-- [License](#license)
 
 ---
 
@@ -405,35 +402,4 @@ Now landing on Runway no. 1 !
 
 ---
 
-## Known Issues & Limitations
-
-This is a course project and the source contains some rough edges worth documenting for anyone building on it:
-
-- **Not a GUI application.** The repository description references a Java Swing GUI; the current source is entirely console-based (`Scanner` input, ANSI-colored `System.out` narration).
-- **Timer scheduling is effectively disabled.** `Task.execute_task()` builds a `TimerTask` and calls `timer.scheduleAtFixedRate(task, date.getTime(), 1000)`, but `TaskEngine.dispatchTask()` also calls `execute_task` synchronously in a loop — the `Timer`-based scheduling against real wall-clock time marks isn't tightly coupled to the simulation's own `Time` objects, so tasks effectively execute immediately/repeatedly rather than exactly at their intended simulated time.
-- **Off-by-one / loop-variable bugs in a few resource-allocation methods.** For example, `AirportGroundNetwork.movetoTaxiway`/`movetoGate` and `AirplaneRelatedTasks.enter_gate` increment the *outer* loop variable (`i`) inside an inner `for` loop's own increment clause (`for (int j = 0; ...; i++)`), which can cause incorrect iteration. `TrafficNetworkRelatedTasks`'s `closeRunway`/`openRunway`/etc. also use `R1 > size()` as their "valid index" guard, which is inverted from the intended bounds check.
-- **`dispatchTask` swallows exceptions silently** (`catch(Exception e){ }`), which can mask bugs during dispatch — useful to know when debugging unexpected behavior.
-- **`AirplaneScheduler.schedule` adds the airplane to the list twice** — once inside `AirplaneList.createAirplane()` and again via the explicit `Alist.addAirplane(A1)` call.
-- **`bestPath` is never populated by the scheduler**, so `TrafficControlRelatedTask.move_airplane()` (which reads `Airplane.getBestPath()`) will operate on the default all-zero array unless set elsewhere.
-- **No automated tests.** All verification is manual/console-driven.
-
-None of the above prevent the simulation from running and producing meaningful, narrated output — they're noted here for transparency and as a roadmap for anyone extending the project.
-
----
-
-## Possible Extensions
-
-Ideas suggested by the original design spec that aren't yet implemented here:
-
-- A dedicated **Simulation/Global Clock** class independent of individual `Task`/`Time` objects, to drive dispatch strictly by simulated time rather than immediate sequential execution.
-- **`AirfieldTrafficFlowAnimator`** — a graphical (e.g. Swing/JavaFX) visualization of aircraft moving through the network in real time.
-- **`ControlLogic`** — a pluggable strategy layer for custom air-traffic-control rules/optimization (e.g. prioritizing throughput vs. minimizing delay).
-- **`TrafficParam`** — configurable simulation parameters (aircraft mix, runway occupancy time, exit-choice distribution, taxiway travel times) instead of the current hard-coded constants.
-- Populating `Airplane.bestPath` from the Dijkstra result so `move_airplane()` can actually walk the computed route.
-- Unit tests around `ShortestPath`, `Time.corrector()`, and `TaskComparator` ordering.
-
----
-
-## License
-
-No license file is currently included in this repository. All rights reserved by the original authors unless a license is added.
+ repository. All rights reserved by the original authors unless a license is added.
