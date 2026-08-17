@@ -2,7 +2,6 @@
 
 A **task-driven, console-based Java simulation** of an Airport Surface Traffic Control (ASTC) system. The project models aircraft, runways, taxiways, gates, and an air traffic control tower as interacting objects that exchange messages ("tasks") through a central, priority-ordered **Task Engine**, following classical object-oriented simulation design.
 
-Built as an Object-Oriented Programming (OOP) course project — 3rd Semester, Bachelor of Computer Engineering.
 
 ---
 
