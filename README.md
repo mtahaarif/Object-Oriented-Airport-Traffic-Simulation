@@ -22,7 +22,6 @@
 - [15. Limitations](#15-limitations)
 - [16. Team Collaboration](#16-team-collaboration)
 - [17. Conclusion](#17-conclusion)
-- [18. Future Work](#18-future-work)
 
 ---
 
