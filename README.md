@@ -184,21 +184,15 @@ Implement the **Home Page** of the application and run the **Global Clock**, usi
 
 ---
 
+![Flowchart](flowchart.png)
+
+
 ## 7. Virtual Path (Airport Network Graph)
 
 The airport surface is represented as a fixed **6-node weighted graph**, with node `0` acting as the primary runway/entry node in the task-handling logic:
 
-```
-      1 ─────4────── 2
-     /│              │\
-    1 │              │ 7
-   /  4              2  \
-  0   │              │   4 ── 6 ── 5
-   \  │      3       │   /
-    4 └──────────────┘  4
-     \                 /
-      └───────5───────┘
-```
+![Virtual Path](virtual-path.png)
+
 
 Adjacency matrix (`Path.airportNetwork`, `0` = no direct edge):
 
@@ -231,12 +225,12 @@ Every `Task` is classified by a **primary identifier** (the subsystem that owns 
 
 | Primary | Subsystem | Secondary | Action | Priority |
 |---|---|---|---|---|
-| 1 | Airplane-related (`AirplaneRelatedTasks`) | 1 | Land on runway | 7 |
-| 1 | | 2 | Exit runway | 5 |
-| 1 | | 3 | Exit taxiway | 4 |
-| 1 | | 4 | Exit gate (depart) | 3 |
-| 1 | | 5 | Enter taxiway | 8 |
-| 1 | | 6 | Enter gate | 9 |
+| 1 | Airplane-related (`AirplaneRelatedTasks`) | 1 | Land on runway | 3 |
+| 1 | | 2 | Exit runway | 9 |
+| 1 | | 3 | Exit taxiway | 8 |
+| 1 | | 4 | Exit gate (depart) | 7 |
+| 1 | | 5 | Enter taxiway | 4 |
+| 1 | | 6 | Enter gate | 5 |
 | 2 | Traffic-network-related (`TrafficNetworkRelatedTasks`) | 1 | Close runway | 15 |
 | 2 | | 2 | Close taxiway | 14 |
 | 2 | | 3 | Close gate | 13 |
@@ -245,8 +239,8 @@ Every `Task` is classified by a **primary identifier** (the subsystem that owns 
 | 2 | | 6 | Open gate | 12 |
 | 3 | Traffic-control-related (`TrafficControlRelatedTask`) | 1 | Move airplane | 2 |
 | 3 | | 2 | Hold airplane | 1 |
-| 3 | | 3 | Park airplane | 6 |
-| 0 | (unclassified/default) | — | — | 16 |
+| 3 | | 3 | Park airplane | 0 |
+| 0 | Scheduling Task | — | — | 10 |
 
 **Landing sequence** (`Task.Landing_Task`), each step offset +10s from the previous: land runway (1,1) → enter taxiway (1,5) → enter gate (1,6) → park (3,3).
 
@@ -285,6 +279,8 @@ sequenceDiagram
         T-->>U: colorized status output
     end
 ```
+
+![UML Diagram](uml.png)
 
 This flowchart explains the basic flow of the program: the user is asked how many planes to schedule, the `AirplaneScheduler` prompts for current location, destination, and departure time; the landing time is set automatically via Dijkstra's algorithm; the departure task automatically generates the full series of tasks (exit gate, exit taxiway, exit runway, move, request landing permission, land on runway, move to taxiway, move to gate, etc.), each offset in time from the last, and sends them to the `collectTask` function in the `TaskEngine`. All tasks are sorted. If a task is delayed (e.g. all runways occupied), it is pushed back via the pending-task logic; on completion, tasks are removed from the list.
 
@@ -373,6 +369,8 @@ Task End Time: 0:0:0
 Permission to Land Airplane no. 483920  Granted!
 Now landing on Runway no. 1 !
 ```
+![Output](output1.png)
+
 
 *(Exact IDs, timing, and ordering will vary — airplane IDs are randomized.)*
 
@@ -383,6 +381,8 @@ Now landing on Runway no. 1 !
 If a task cannot be performed at a given stage — for example, all runways are occupied — that task is delayed via the `pendingTask` function of the `TaskEngine`, which removes the task from the active queue, prompts for a new time, and re-queues it so the aircraft can retry for permission once resources free up.
 
 ---
+![Output2](output2.png)
+
 
 ## 14. Mathematical Modeling
 
