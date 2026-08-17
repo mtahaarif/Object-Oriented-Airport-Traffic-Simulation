@@ -408,12 +408,3 @@ All three team members — Muhammad Mussa Kazim, Muhammad Taha, and Sohaib Afzal
 ## 17. Conclusion
 
 The Airport Surface Traffic Control (ASTC) System project demonstrates a comprehensive simulation and management system for efficiently handling airplane traffic within an airport environment. The object-oriented modeling and simulation approach used in the project provides a realistic representation of various components, including airplanes, tasks, and the ground network. The incorporation of task scheduling, dynamic pathfinding algorithms, and a well-structured object-oriented design enables effective control and coordination of airport surface traffic. The collaborative functioning of all classes ensures a seamless simulation experience, capturing the complexities of real-world airport operations. This project not only provides a valuable tool for studying and optimizing airport traffic control, but also serves as a robust foundation for potential future expansions and enhancements in the field of aviation systems.
-
----
-
-- *Project Statement.pdf* — "Object Oriented Modeling and Simulation of Airport Surface Traffic Control (ASTC) System," original academic project brief.
-- *project report.docx* — Official project report submitted by the team on 16th January, 2023.
-
-## License
-
-No license file is currently included in this repository. All rights reserved by the original authors unless a license is added.
